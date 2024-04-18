@@ -18,7 +18,7 @@ function EmailSection({
               ...(prevContact.data || []),
               {
                 _id: new Date().getTime().toString(),
-                title: "email",
+                type: "email",
                 value: "",
               },
             ],
@@ -31,7 +31,7 @@ function EmailSection({
       </button>
       <div className="">
         {contact.data
-          ?.filter((item) => item.title === "email")
+          ?.filter((item) => item.type === "email")
           .map((item, i) => (
             <div className="flex gap-2 items-center mt-3" key={i}>
               <button
@@ -73,7 +73,7 @@ function EmailSection({
                     }));
                   }
                 }}
-                className="bg-transparent focus:outline-none text-white"
+                className="bg-transparent focus:outline-none text-white w-full"
               />
             </div>
           ))}

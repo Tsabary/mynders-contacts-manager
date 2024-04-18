@@ -6,13 +6,13 @@ const AlphabetSidebar: React.FC<{ currentLetter: string }> = ({
   const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
 
   return (
-    <div className="absolute right-8 top-0 bottom-20 flex flex-col items-center justify-evenly">
+    <div className="absolute z-50 right-8 top-0 bottom-20 flex flex-col items-center justify-evenly">
       {alphabet.map((letter) => (
         <div
           key={letter}
-          className={`text-xs ${
+          className={`text-xs transition-all ease-in-out ${
             currentLetter === letter
-              ? "text-blue-500 font-bold"
+              ? "text-purple-500 font-bold text-base"
               : "text-gray-400"
           }`}
         >

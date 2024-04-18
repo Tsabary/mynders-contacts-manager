@@ -1,0 +1,1 @@
+type DataItem={ _id: string; type: "email" | "phone_number"; value: string }

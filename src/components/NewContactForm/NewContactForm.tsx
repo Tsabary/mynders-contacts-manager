@@ -20,7 +20,7 @@ function NewContactForm({
 }) {
   const { isLosingFocus, user, folderId, encryptData } = useMynders();
   const { firestore, analytics } = useFirebase();
-  const [contact, setContact] = useState<Partial<Contact>>({});
+  const [contact, setContact] = useState<Partial<Contact>>({ data: [] });
 
   const isContactValid = useMemo(() => {
     // Check if the name is undefined or empty
@@ -68,7 +68,7 @@ function NewContactForm({
       if (analytics) {
         logEvent(analytics, "new_contact");
       }
-      setContact({});
+      setContact({ data: [] });
       setShowNewContact(false);
     } catch (err) {
       handleError(err, "Failed to add contact: ");

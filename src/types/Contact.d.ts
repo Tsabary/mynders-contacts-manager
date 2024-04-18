@@ -1,7 +1,7 @@
 type Contact = {
   _id: string;
   name: string;
-  data: { _id: string; title: "email" | "phone_number"; value: string }[];
+  data: DataItem[];
   user_id: string;
   folder_id: string;
   created_at: Date;

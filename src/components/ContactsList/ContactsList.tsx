@@ -10,6 +10,7 @@ import {
 import useMynders from "../../hooks/useMynders";
 import AlphabetSidebar from "./AlphabetSidebar";
 import ContactItem from "./ContactItem";
+import { generateBackgroundPattern } from "mynders";
 
 const ContactsList: React.FC = () => {
   const [currentLetter, setCurrentLetter] = useState("A");
@@ -81,25 +82,34 @@ const ContactsList: React.FC = () => {
     <>
       <div
         onScroll={handleScroll}
-        className="absolute inset-0 z-10 overflow-y-scroll pl-4 pr-16"
+        className="absolute inset-0 z-10 overflow-y-auto pl-4 pr-16"
+        style={generateBackgroundPattern("#fff","#edf4ff")}
       >
-        {"ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map((letter) => (
-          <section
-            className="pt-3"
-            key={letter}
-            data-letter={letter}
-            id={`letter-${letter}`}
-          >
-            <h2 className="text-sm text-gray-300 border-b">{letter}</h2>
-            {contacts
-              .filter((c) =>
-                c.name.toLowerCase().startsWith(letter.toLowerCase())
-              )
-              .map((contact) => (
+        {"ABCDEFGHIJKLMNOPQRSTUVWXYZ#".split("").map((letter) => {
+          let sectionContacts = [];
+          if (letter === "#") {
+            sectionContacts = contacts.filter((c) => !/^[A-Z]/i.test(c.name));
+          } else {
+            sectionContacts = contacts.filter((c) =>
+              c.name.toLowerCase().startsWith(letter.toLowerCase())
+            );
+          }
+
+          if (sectionContacts.length === 0) return null;
+          return (
+            <section
+              className="pt-3"
+              key={letter}
+              data-letter={letter}
+              id={`letter-${letter}`}
+            >
+              <h2 className="text-sm text-gray-300 border-b">{letter}</h2>
+              {sectionContacts.map((contact) => (
                 <ContactItem contact={contact} key={contact._id} />
               ))}
-          </section>
-        ))}
+            </section>
+          );
+        })}
       </div>
       <AlphabetSidebar currentLetter={currentLetter} />
     </>

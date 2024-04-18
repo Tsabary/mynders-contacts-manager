@@ -18,7 +18,7 @@ function PhoneSection({
               ...(prevContact.data || []),
               {
                 _id: new Date().getTime().toString(),
-                title: "phone_number",
+                type: "phone_number",
                 value: "",
               },
             ],
@@ -31,7 +31,7 @@ function PhoneSection({
       </button>
       <div className="">
         {contact.data
-          ?.filter((item) => item.title === "phone_number")
+          ?.filter((item) => item.type === "phone_number")
           .map((item, i) => (
             <div className="flex gap-2 items-center mt-3" key={i}>
               <button
@@ -73,7 +73,7 @@ function PhoneSection({
                     }));
                   }
                 }}
-                className="bg-transparent focus:outline-none text-white"
+                className="bg-transparent focus:outline-none text-white w-full"
               />
             </div>
           ))}
