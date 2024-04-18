@@ -1,0 +1,40 @@
+{
+  "name": "contacts-manager",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.24.0",
+    "@babel/preset-env": "^7.24.0",
+    "@babel/preset-react": "^7.23.3",
+    "@types/react": "^18.2.25",
+    "@types/react-dom": "^18.2.20",
+    "@types/validator": "^13.11.9",
+    "@vitejs/plugin-react": "^4.2.1",
+    "autoprefixer": "^10.4.18",
+    "firebase": "^10.11.0",
+    "mynders": "^1.0.56",
+    "postcss": "^8.4.35",
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0",
+    "react-modern-drawer": "^1.2.2",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.2.2",
+    "vite": "^5.1.4",
+    "vite-plugin-css-injected-by-js": "^3.4.0"
+  },
+  "peerDependencies": {
+    "mynders": "*",
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0",
+    "tailwindcss": "^3.4.1"
+  },
+  "dependencies": {
+    "validator": "^13.11.0"
+  }
+}
