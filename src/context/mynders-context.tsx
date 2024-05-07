@@ -1,7 +1,7 @@
 import React, { createContext } from "react";
-import { MyndersAppProps } from "mynders";
+import { PluginProps } from "mynders";
 
-type MyndersContextProps = Partial<MyndersAppProps>;
+type MyndersContextProps = Partial<PluginProps>;
 export const MyndersContext = createContext<MyndersContextProps>({});
 
 interface MyndersProviderProps

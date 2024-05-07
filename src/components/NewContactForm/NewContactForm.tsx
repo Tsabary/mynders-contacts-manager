@@ -120,7 +120,7 @@ function NewContactForm({
             onChange={(e) =>
               setContact((prev) => ({ ...prev, name: e.target.value }))
             }
-            className="bg-transparent focus:outline-none text-white"
+            className="bg-transparent focus:outline-none text-white w-full"
           />
         </div>
         <PhoneSection contact={contact} setContact={setContact} />

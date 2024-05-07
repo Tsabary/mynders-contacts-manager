@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import PhoneRow from "./PhoneRow";
+import EmailRow from "./EmailRow";
 
 function ContactItem({ contact }: { contact: Contact }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -35,7 +36,7 @@ function ContactItem({ contact }: { contact: Contact }) {
         <div>
           {contact.data.map((item) => {
             if (item.type === "email") {
-              return <p>Email:sdsdsd</p>;
+              return <EmailRow item={item} key={item._id} />
             }
 
             if (item.type === "phone_number") {

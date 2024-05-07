@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { generateBackgroundPattern } from "mynders";
+import { TbUserPlus } from "react-icons/tb";
 import useFirebase from "../../hooks/useFirebase";
 import {
   collection,
@@ -10,24 +12,26 @@ import {
 import useMynders from "../../hooks/useMynders";
 import AlphabetSidebar from "./AlphabetSidebar";
 import ContactItem from "./ContactItem";
-import { generateBackgroundPattern } from "mynders";
 
 const ContactsList: React.FC = () => {
   const [currentLetter, setCurrentLetter] = useState("A");
-  const { folderId, decryptData } = useMynders();
+  const { folderId, decryptData, isHome } = useMynders();
   const { firestore } = useFirebase();
-  const [contacts, setContacts] = useState<Contact[]>([]);
+  const [contacts, setContacts] = useState<Contact[]>();
 
   useEffect(() => {
     // Adjust the query as needed, for example using `where` for filtering
-    const q = query(
+    let q = query(
       collection(
         firestore!,
         "plugins-data/com.mynders.contacts_manager/contacts"
       ),
-      where("folder_id", "==", folderId),
       orderBy("name", "asc")
     );
+
+    if (!isHome) {
+      q = query(q, where("folder_id", "==", folderId));
+    }
 
     const unsubscribe = onSnapshot(
       q,
@@ -40,7 +44,7 @@ const ContactsList: React.FC = () => {
             } as Contact)
         );
 
-        const serialzedContacts = docs.map((doc) => {
+        const serializedContacts = docs.map((doc) => {
           return {
             ...doc,
             name: decryptData!(doc.name),
@@ -50,7 +54,17 @@ const ContactsList: React.FC = () => {
             })),
           };
         });
-        setContacts(serialzedContacts);
+
+        // Sort contacts if needed, and extract the first letter of the first contact
+        serializedContacts.sort((a, b) => a.name.localeCompare(b.name));
+        if (serializedContacts.length > 0) {
+          const firstLetter = serializedContacts[0].name[0].toUpperCase();
+          setCurrentLetter(firstLetter);
+        } else {
+          setCurrentLetter("A"); // default to 'A' or some other logic if no contacts
+        }
+
+        setContacts(serializedContacts);
       },
       (error) => {
         console.error("Error fetching documents: ", error);
@@ -80,37 +94,45 @@ const ContactsList: React.FC = () => {
 
   return (
     <>
-      <div
-        onScroll={handleScroll}
-        className="absolute inset-0 z-10 overflow-y-auto pl-4 pr-16"
-        style={generateBackgroundPattern("#fff","#edf4ff")}
-      >
-        {"ABCDEFGHIJKLMNOPQRSTUVWXYZ#".split("").map((letter) => {
-          let sectionContacts = [];
-          if (letter === "#") {
-            sectionContacts = contacts.filter((c) => !/^[A-Z]/i.test(c.name));
-          } else {
-            sectionContacts = contacts.filter((c) =>
-              c.name.toLowerCase().startsWith(letter.toLowerCase())
-            );
-          }
+      {contacts && contacts.length === 0 && (
+        <div className="absolute inset-0 z-20 flex flex-col gap-2 justify-center items-center">
+          <TbUserPlus className="h-8 w-8 text-gray-400" />
+          <p className="text-lg text-gray-400">Add you first contact</p>
+        </div>
+      )}
+      {contacts && (
+        <div
+          onScroll={handleScroll}
+          className="absolute inset-0 z-10 overflow-y-auto pl-4 pr-16 md:!pr-20"
+          style={generateBackgroundPattern("#fff", "#edf4ff")}
+        >
+          {"ABCDEFGHIJKLMNOPQRSTUVWXYZ#".split("").map((letter) => {
+            let sectionContacts = [];
+            if (letter === "#") {
+              sectionContacts = contacts.filter((c) => !/^[A-Z]/i.test(c.name));
+            } else {
+              sectionContacts = contacts.filter((c) =>
+                c.name.toLowerCase().startsWith(letter.toLowerCase())
+              );
+            }
 
-          if (sectionContacts.length === 0) return null;
-          return (
-            <section
-              className="pt-3"
-              key={letter}
-              data-letter={letter}
-              id={`letter-${letter}`}
-            >
-              <h2 className="text-sm text-gray-300 border-b">{letter}</h2>
-              {sectionContacts.map((contact) => (
-                <ContactItem contact={contact} key={contact._id} />
-              ))}
-            </section>
-          );
-        })}
-      </div>
+            if (sectionContacts.length === 0) return null;
+            return (
+              <section
+                className="pt-3"
+                key={letter}
+                data-letter={letter}
+                id={`letter-${letter}`}
+              >
+                <h2 className="text-sm text-gray-300 border-b">{letter}</h2>
+                {sectionContacts.map((contact) => (
+                  <ContactItem contact={contact} key={contact._id} />
+                ))}
+              </section>
+            );
+          })}
+        </div>
+      )}
       <AlphabetSidebar currentLetter={currentLetter} />
     </>
   );

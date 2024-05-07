@@ -2,7 +2,7 @@ import "./styles.css";
 import "react-modern-drawer/dist/index.css";
 
 import React, { useState } from "react";
-import { MyndersAppProps } from "mynders";
+import { PluginProps } from "mynders";
 
 import { MyndersProvider } from "./context/mynders-context";
 import { NewContactForm } from "./components/NewContactForm";
@@ -26,7 +26,7 @@ function Plugin() {
     </div>
   );
 }
-const PluginContainer = React.memo((props: MyndersAppProps) => (
+const PluginContainer = React.memo((props: PluginProps) => (
   <MyndersProvider {...props}>
     <FirebaseProvider>
       <Plugin />
